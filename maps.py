@@ -57,9 +57,9 @@ def update_all_route_times():
     updates the rotues with the new time
     emits socket io event to client to retrieve updated routes
     """
-    # import cant be in top level. we pull socket io from app.
+    # import cant be in top level. we pull socket io from main.
     # if we put it toplevel, we get circular import err
-    from app import socketio
+    from main import socketio
     users = users_collection.find({}) # get all users
     for user in users:
         routes = user.get("routes")
