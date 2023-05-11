@@ -30,7 +30,7 @@ socketio = SocketIO(app, cors_allowed_origins=config.CLIENT_LINK)
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
-
+    
 # you need an ssl cert, used mkcert to generate it in root
 # to run, use:
 # flask run --cert=local-cert.pem --key=local-key.pem
