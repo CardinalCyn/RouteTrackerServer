@@ -7,7 +7,6 @@ import requests
 from db import users_collection
 from apscheduler.schedulers.background import BackgroundScheduler
 import config
-# from app import socketio
 def encode_address(address):
     """
     Used for generating a google maps link for the user to be able to click on for directions

@@ -13,6 +13,7 @@ from flask_session import Session
 import routes
 from flask_cors import CORS
 from flask_socketio import SocketIO
+import os
 import config
 # flask boilerplate
 app = Flask(__name__)
@@ -26,6 +27,9 @@ Session(app)
 routes.create_routes(app)
 # socket io, connects to angular
 socketio = SocketIO(app, cors_allowed_origins=config.CLIENT_LINK)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=os.getenv("PORT", default=5000))
 
 # you need an ssl cert, used mkcert to generate it in root
 # to run, use:
