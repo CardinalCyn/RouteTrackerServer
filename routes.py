@@ -78,6 +78,7 @@ def create_routes(app):
                 insert_result = users_collection.insert_one(
                     {'username': username, 'password': hashed, 'routes': []})
                 if insert_result:
+                    print("hi")
                     session_id = create_session(username)
                     response = make_response({
                         'status': "registerSuccess", 'message': "Register request success"})
