@@ -59,33 +59,35 @@ def create_routes(app):
         if successful, creates session/ cookie, inserts into browser
         returns fail otherwise
         """
-        if request.method=="POST":
-            request_data = request.get_json()
-            print(request_data)
-            username = request_data.get('username')
-            password = request_data.get('password')
-            if validate_username(username)!="usernameValid":
-                return {'status':"registerFailure","message":validate_username(username)}
-            if validate_password(password)!="passwordValid":
-                return {'status':"registerFailure","message":validate_password(password)}
-            user_search_result=users_collection.find_one({'username':username})
-            if user_search_result:
+        try:
+            if request.method == "POST":
+                request_data = request.get_json()
+                username = request_data.get('username')
+                password = request_data.get('password')
+                if validate_username(username) != "usernameValid":
+                    return {'status': "registerFailure", 'message': validate_username(username)}
+                if validate_password(password) != "passwordValid":
+                    return {'status': "registerFailure", 'message': validate_password(password)}
+                user_search_result = users_collection.find_one({'username': username})
+                if user_search_result:
+                    return {
+                        'status': "registerFailure",
+                        'message': "A user with that username already exists"
+                    }
+                hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                insert_result = users_collection.insert_one(
+                    {'username': username, 'password': hashed, 'routes': []})
+                if insert_result:
+                    session_id = create_session(username)
+                    response = make_response({
+                        'status': "registerSuccess", 'message': "Register request success"})
+                    response.set_cookie('session_id', str(session_id).encode('utf-8'),
+                                        samesite='None', secure='True', domain=config.DOMAIN)
+                    return response
                 return {
-                'status':"registerFailure","message":"A user with that username already exists"
-                }
-            hashed=bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
-            insert_result=users_collection.insert_one(
-                {'username':username,'password':hashed,'routes':[]})
-            if insert_result:
-                session_id=create_session(username)
-                response= make_response({
-                    'status':"registerSuccess",'message':"Register request success"})
-                response.set_cookie('session_id',str(session_id).encode('utf-8'),
-                                    samesite='None',secure='True',domain=config.DOMAIN)
-                return response
-            return {
-            'status':"registerFailure",'message':"Register was unsuccessful, try again later"}
-        return {'status':"registerFailure",'message':"Register was unsuccessful, try again later"}
+                    'status': "registerFailure", 'message': "Register was unsuccessful, try again later"}
+        except Exception as e:
+            return {'status': "registerFailure", 'message': str(e)}
 
     @app.route("/checkSession",methods=["GET"])
     @cross_origin(supports_credentials=True)
