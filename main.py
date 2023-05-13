@@ -18,7 +18,7 @@ import config
 # flask boilerplate
 app = Flask(__name__)
 # cors to connect to angular server only
-CORS(app,origins=[config.CLIENT_LINK], methods=["GET", "POST", "PUT", "DELETE"])
+CORS(app,origins=[config.CLIENT_LINK], methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["Content-Type"])
 # secret for session encoding, and allows us to set cookies in browser
 app.config["SECRET_KEY"]=config.SESSION_SECRET_KEY
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)

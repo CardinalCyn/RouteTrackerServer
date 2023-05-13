@@ -61,6 +61,7 @@ def create_routes(app):
         """
         if request.method=="POST":
             request_data = request.get_json()
+            print(request_data)
             username = request_data.get('username')
             password = request_data.get('password')
             if validate_username(username)!="usernameValid":
