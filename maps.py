@@ -75,6 +75,7 @@ def update_all_route_times():
         users_collection.update_one({"username":user["username"]},{"$set":{"routes":new_routes}})
     socketio.emit('reloadRoutes',{'status':"success"})
 # scheduler, runs every 10 mins to update all routes
-scheduler=BackgroundScheduler()
-scheduler.add_job(update_all_route_times,'interval',minutes=10)
-scheduler.start()
+
+# scheduler=BackgroundScheduler()
+# scheduler.add_job(update_all_route_times,'interval',minutes=10)
+# scheduler.start()
