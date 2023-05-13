@@ -6,10 +6,14 @@ defines functions used in other modules:
 """
 from pymongo import MongoClient
 import config
-client = MongoClient(config.DB_LINK)
-db=client["GoogleMapsRouteTracker"]
-users_collection=db["users"]
-sessions_collection=db["sessions"]
+try:
+    client = MongoClient(config.DB_LINK)
+    db=client["GoogleMapsRouteTracker"]
+    users_collection=db["users"]
+    sessions_collection=db["sessions"]
+    print("Successfully connected to MongoDB!")
+except Exception as e:
+    print("Error connecting to MongoDB:", e)
 
 def get_user_routes(username):
     """
