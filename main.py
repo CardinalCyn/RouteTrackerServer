@@ -21,7 +21,8 @@ app = Flask(__name__)
 CORS(app,origins=[config.CLIENT_LINK], methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["Content-Type"])
 # secret for session encoding, and allows us to set cookies in browser
 app.config["SECRET_KEY"]=config.SESSION_SECRET_KEY
-app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+app.config['CORS_SUPPORTS_CREDENTIALS'] = True
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True, supports_credentials=True)
 Session(app)
 # load routes
 routes.create_routes(app)
