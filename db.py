@@ -5,13 +5,15 @@ defines functions used in other modules:
 
 """
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 import config
+client = MongoClient(config.DB_LINK, server_api=ServerApi('1'))
 try:
-    client = MongoClient(config.DB_LINK)
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
     db=client["GoogleMapsRouteTracker"]
     users_collection=db["users"]
     sessions_collection=db["sessions"]
-    print("Successfully connected to MongoDB!")
 except Exception as e:
     print("Error connecting to MongoDB:", e)
 
