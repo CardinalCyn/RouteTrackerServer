@@ -27,27 +27,31 @@ def create_routes(app):
         checks user pass to hashed pw in db
         creates session if valid, sets cookie w/ session id
         """
-        if request.method=="POST":
-            request_data = request.get_json()
-            username = request_data.get('username')
-            password = request_data.get('password')
-            if validate_username(username)!="usernameValid":
-                return {'status':"loginFailure","message":validate_username(username)}
-            if validate_password(password)!="passwordValid":
-                return {'status':"loginFailure","message":validate_password(password)}
-            user_search_results=users_collection.find_one({'username':username})
-            if user_search_results:
-                hashed=user_search_results.get('password')
-                if bcrypt.checkpw(password.encode('utf-8'),hashed):
-                    session_id=create_session(username)
-                    response = make_response({
-                        'status':"loginSuccess","message":"Login request success"})
-                    response.set_cookie('session_id', str(session_id).encode('utf-8'),
-                                        samesite='None',secure='True',domain=config.DOMAIN)
-                    return response
-                return {'status':"loginFailure","message":"That password is incorrect"}
-            return {'status':"loginFailure","message":"That username was not found"}
-        return {'status':"loginFailure","message":"Login request failed"}
+        try:
+            if request.method == "POST":
+                request_data = request.get_json()
+                username = request_data.get('username')
+                password = request_data.get('password')
+                if validate_username(username) != "usernameValid":
+                    return {'status': "loginFailure", 'message': validate_username(username)}
+                if validate_password(password) != "passwordValid":
+                    return {'status': "loginFailure", 'message': validate_password(password)}
+                user_search_results = users_collection.find_one({'username': username})
+                if user_search_results:
+                    hashed = user_search_results.get('password')
+                    if bcrypt.checkpw(password.encode('utf-8'), hashed):
+                        session_id = create_session(username)
+                        response = make_response({
+                            'status': "loginSuccess", 'message': "Login request success"})
+                        response.set_cookie('session_id', str(session_id).encode('utf-8'),
+                                            samesite='None', secure='True', domain=config.DOMAIN)
+                        return response
+                    return {'status': "loginFailure", 'message': "That password is incorrect"}
+                return {'status': "loginFailure", 'message': "That username was not found"}
+        except Exception as e:
+            print(str(e))
+            return {'status': "loginFailure", 'message': f"An error occurred: {str(e)}"}
+        return {'status': "loginFailure", 'message': "Login request failed"}
 
     @app.route("/register", methods=["POST"])
     @cross_origin(supports_credentials=True)
