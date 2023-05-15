@@ -43,8 +43,9 @@ def create_routes(app):
                         session_id = create_session(username)
                         response = make_response({
                             'status': "loginSuccess", 'message': "Login request success"})
+                        print(config.DOMAIN)
                         response.set_cookie('session_id', str(session_id).encode('utf-8'),
-                                            samesite='None', secure='True', domain=config.DOMAIN)
+                                            samesite='None', secure='True', domain="route-saver.com")
                         return response
                     return {'status': "loginFailure", 'message': "That password is incorrect"}
                 return {'status': "loginFailure", 'message': "That username was not found"}
