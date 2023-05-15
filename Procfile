@@ -1,1 +1,1 @@
-web: gunicorn main:app
+web: gunicorn main:app -k gevent --worker-connections 1000 -w 4 --bind 0.0.0.0:$PORT
