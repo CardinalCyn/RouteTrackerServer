@@ -47,7 +47,6 @@ def delete_expired_sessions():
     """
     goes through sessions colelction, deletes all that are expired from now
     """
-    print("clearing exp sessions")
     sessions_collection.delete_many({'expiration':{"$lt":datetime.datetime.now()}})
 
 # scheduler to delete expired sessions every 10 min

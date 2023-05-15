@@ -43,9 +43,8 @@ def create_routes(app):
                         session_id = create_session(username)
                         response = make_response({
                             'status': "loginSuccess", 'message': "Login request success"})
-                        print(config.DOMAIN)
                         response.set_cookie('session_id', str(session_id).encode('utf-8'),
-                                            samesite='None', secure='True', domain="route-saver.com")
+                                            samesite='None', secure='True', domain=config.DOMAIN)
                         return response
                     return {'status': "loginFailure", 'message': "That password is incorrect"}
                 return {'status': "loginFailure", 'message': "That username was not found"}
@@ -211,10 +210,12 @@ def create_routes(app):
         """
         if request.method=="GET":
             if 'session_id' in request.cookies: 
+                print("logging out")
                 session_id=request.cookies.get('session_id')
                 delete_session(session_id)
                 response=make_response({'status':"loggedOut"})
                 response.delete_cookie('session_id')
+                print("logged out")
                 return response
             return {"status":"noSession"}
         return {"status":"logOutReqFailed"}
