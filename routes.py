@@ -210,12 +210,10 @@ def create_routes(app):
         """
         if request.method=="GET":
             if 'session_id' in request.cookies: 
-                print("logging out")
                 session_id=request.cookies.get('session_id')
                 delete_session(session_id)
                 response=make_response({'status':"loggedOut"})
                 response.delete_cookie('session_id')
-                print("logged out")
                 return response
             return {"status":"noSession"}
         return {"status":"logOutReqFailed"}

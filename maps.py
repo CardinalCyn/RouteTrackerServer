@@ -77,5 +77,5 @@ def update_all_route_times():
 # scheduler, runs every 10 mins to update all routes
 
 scheduler=BackgroundScheduler()
-scheduler.add_job(update_all_route_times,'interval',minutes=10)
+scheduler.add_job(update_all_route_times,'interval',minutes=200)
 scheduler.start()
